@@ -12,7 +12,7 @@ class FormUserNeededMixin(object):
             return self.form_invalid(form)
 
 
-class UserOwnerMixin(FormUserNeededMixin, object):
+class UserOwnerMixin(object):
     def form_valid(self, form):
         if form.instance.user == self.request.user:
             return super(FormUserNeededMixin, self).form_valid(form)
