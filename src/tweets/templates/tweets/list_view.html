@@ -1,6 +1,12 @@
-{% for object in object_list %}
-    {{ object.user }}<br/>
-    {{ object.content }}<br/>  
-    {{ object.timestamp}}<br/>
-<br/>
-{% endfor %}
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% for object in object_list %}
+        {{ object.user }}<br/>
+        {{ object.content }}<br/>  
+        {{ object.timestamp}}<br/>
+    <br/>
+    {% endfor %}
+
+{% endblock content %}
