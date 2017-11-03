@@ -1,4 +1,6 @@
 from django.contrib.auth import get_user_model
+
+
 from rest_framework import serializers
 
 
@@ -16,5 +18,5 @@ class UserDisplaySerializer(serializers.ModelSerializer):
             # 'email',
         ]
 
-    def follower_count(self, obj):
+    def get_follower_count(self, obj):
         return 0
