@@ -17,6 +17,7 @@
         $(document).ready(function(){
             var query = getParameterByName('q')
             var tweetList = [];
+            var nextTweetUrl;
 
             function attachTweet(tweetValue, prepend){
                 var tweetContent = tweetValue.content;
@@ -41,16 +42,28 @@
                 }
             }
 
-            function fetchTweets(){
+            function fetchTweets(url){
                 console.log("Fetching..")
+                var fetchUrl;
+                if (!url){
+                    fetchUrl = "/api/tweet/"
+                } else {
+                    fetchUrl = url
+                }
                 $.ajax({
-                url: "/api/tweet/",
+                url: fetchUrl,
                 data: {
                     "q": query
                 },
                 method: "GET",
                 success: function(data){
-                    tweetList = data
+                    tweetList = data.results
+                    if (data.next){
+                        nextTweetUrl = data.next
+                    } else {
+                        $("#loadmore").css("display", "none")
+                    }
+                    
                     parseTweets()
                 },
                 error: function(data){
@@ -61,6 +74,15 @@
             }
 
             fetchTweets()
+
+            $("#loadmore").click(function(event){
+                event.preventDefault()
+                // load more items
+                if (nextTweetUrl){
+                    fetchTweets(nextTweetUrl)
+                }
+            })
+
             var charsStart = 140;
             var charsCurrent = 0;
             $("#tweet-form").append("<span id='tweetCharsLeft'>" + charsStart + "</span>")
@@ -133,7 +155,7 @@
 
     </div>
 
-        
+    <a href='#' id='loadmore'>Load More Tweets</a>
 </div>
 </div>
 {% endblock content %}
