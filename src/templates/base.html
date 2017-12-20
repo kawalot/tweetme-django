@@ -51,7 +51,7 @@
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
-function loadTweetContainer(tweetContainerID){
+function loadTweetContainer(tweetContainerID, fetchOneId){
         var query = getParameterByName('q')
         var tweetList = [];
         var nextTweetUrl;
@@ -200,6 +200,29 @@ function loadTweetContainer(tweetContainerID){
             }
         }
 
+        function fetchSingle(fetchOneId){
+            var fetchDetailUrl = '/api/tweet/' + fetchOneId + '/'
+            $.ajax({
+            url: fetchDetailUrl,
+            method: "GET",
+            success: function(data){
+                
+                tweetList = data.results
+                // if (data.next){
+                //     nextTweetUrl = data.next
+                // } else {
+                //     $("#loadmore").css("display", "none")
+                // }
+                
+                parseTweets()
+                updateHashLinks()
+            },
+            error: function(data){
+                console.log("error")
+                console.log(data)
+            }
+        }) 
+        }
         function fetchTweets(url){
             var fetchUrl;
             if (!url){
@@ -230,8 +253,12 @@ function loadTweetContainer(tweetContainerID){
             }
         }) 
         }
-
-        fetchTweets()
+        if (fetchOneId){
+            fetchSingle(fetchOneId)
+        } else {
+            fetchTweets()
+        }
+        
 
         $("#loadmore").click(function(event){
             event.preventDefault()
