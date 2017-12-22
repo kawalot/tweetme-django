@@ -47,10 +47,15 @@ class TweetDetailAPIView(generics.ListAPIView):
     serializer_class = TweetModelSerializer
     pagination_class = StandartResultsPagination
     permission_classes = [permissions.AllowAny]
+
     def get_queryset(self, *args, **kwargs):
         tweet_id = self.kwargs.get("pk")
         qs = Tweet.objects.filter(pk=tweet_id)
-        return qs   
+        if qs.exists() and qs.count() == 1:
+            parent_obj = qs.first()
+            qs1 = parent_obj.get_children()
+            qs = (qs | qs1).distinct().extra(select={"parent_id_null": 'parent_id IS NULL'})
+        return qs.order_by("-parent_id_null", '-timestamp')
 
 class TweetListAPIView(generics.ListAPIView):
     serializer_class = TweetModelSerializer
