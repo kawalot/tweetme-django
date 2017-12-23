@@ -149,7 +149,7 @@ function loadTweetContainer(tweetContainerID, fetchOneId){
             var isReply = tweetValue.reply;
             var replyId = tweetValue.id
             if (tweetValue.parent) {
-                replyId = tweet.Value.parent.id
+                replyId = tweetValue.parent.id
             }
             var openingContainerDiv = "<div class=\"media\">"
             if (tweetValue.id == fetchOneId){
@@ -353,7 +353,7 @@ function loadTweetContainer(tweetContainerID, fetchOneId){
         function doneSearchTyping(){
           if (searchQuery){
             //do search
-            var url = '/tweet/search/?q=' + searchQuery
+            var url = '/search/?q=' + searchQuery
             document.location.href = url;
           }
         }
