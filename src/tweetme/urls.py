@@ -22,6 +22,7 @@ from tweets.api.views import SearchTweetAPIView
 from hashtags.views import HashTagView
 from tweets.views import TweetListView
 from .views import home, SearchView
+from hashtags.api.views import TagTweetAPIView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^api/', include('accounts.api.urls', namespace='profiles-api')),    
     url(r'^', include('accounts.urls', namespace='profiles')),
     url(r'^api/search/$', SearchTweetAPIView.as_view(), name='search-api'),
+    url(r'^api/tags/(?P<hashtag>.*)/$', TagTweetAPIView.as_view(), name='tag-tweet-api'),
 ]
 
 if settings.DEBUG:
