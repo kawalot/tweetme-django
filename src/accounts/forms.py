@@ -20,7 +20,8 @@ class UserRegisterForm(forms.Form):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username__icontains=username).exists():
             raise forms.ValidationError("This username is taken")
-    
+        return username
+        
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email__icontains=email).exists():
